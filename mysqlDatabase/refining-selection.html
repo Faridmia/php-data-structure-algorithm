@@ -1,0 +1,481 @@
+INSERT INTO books
+    (title, author_fname, author_lname, released_year, stock_quantity, pages)
+    VALUES ('10% Happier', 'Dan', 'Harris', 2014, 29, 256), 
+           ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
+           ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
+
+
+১. SELECT author_lname FROM books;
+    ব্যাখ্যা: এটি books টেবিল থেকে author_lname কলামের সমস্ত মান রিটার্ন করবে।
+    ফলাফল: author_lname কলামের সকল মান দেখাবে। যদি একই নাম একাধিকবার থাকে, তাহলে সেই নামগুলি একাধিকবার দেখা যাবে।
+
+২. SELECT DISTINCT author_lname FROM books;
+    ব্যাখ্যা: এই কোয়্যারিতে DISTINCT ব্যবহার করা হয়েছে, যা author_lname কলামের শুধুমাত্র অনন্য (একক) মানগুলো রিটার্ন করবে।
+    ফলাফল: author_lname কলামে কোনো নাম যদি বারবার থাকে, তাহলে শুধু একবার দেখাবে, এবং ডুপ্লিকেট নাম বাদ যাবে।
+
+৩. SELECT author_fname, author_lname FROM books;
+    ব্যাখ্যা: এই কোয়্যারিটি books টেবিল থেকে author_fname এবং author_lname কলামের সকল মান রিটার্ন করবে।
+    ফলাফল: প্রতিটি লেখকের প্রথম ও শেষ নাম পৃথক কলামে দেখাবে, এবং যদি একই লেখকের নাম একাধিকবার থাকে, সেটাও বারবার দেখাবে।
+
+৪. SELECT DISTINCT CONCAT(author_fname,' ', author_lname) FROM books;
+    ব্যাখ্যা: এই কোয়্যারিতে DISTINCT এবং CONCAT ব্যবহার করা হয়েছে। এখানে CONCAT ফাংশনটি লেখকের প্রথম এবং শেষ নাম একসাথে যোগ করে একটি স্ট্রিং তৈরি করবে এবং DISTINCT ব্যবহার করার ফলে অনন্য স্ট্রিংগুলোই দেখাবে।
+    ফলাফল: লেখকের নামগুলি (যেমন, "John Doe") দেখাবে যেখানে একাধিকবার থাকা নামগুলি শুধু একবার দেখানো হবে। লেখকের প্রথম ও শেষ নামের পূর্ণ স্ট্রিং আকারে রিটার্ন হবে।
+
+৫. SELECT DISTINCT author_fname, author_lname FROM books;
+    ব্যাখ্যা: এখানে DISTINCT ব্যবহারের মাধ্যমে author_fname এবং author_lname কলামের অনন্য কম্বিনেশনগুলো রিটার্ন করা হবে। যদি কোনো লেখকের প্রথম ও শেষ নাম একই থাকে, তাহলে সেটি একবারই দেখাবে।
+    ফলাফল: প্রতিটি লেখকের অনন্য নাম কম্বিনেশন দেখাবে, যা author_fname এবং author_lname এর অনন্য জোড়াগুলো দেখাবে।
+    সারসংক্ষেপে, DISTINCT ব্যবহার করা হয় ডুপ্লিকেট ডেটা বাদ দেয়ার জন্য এবং CONCAT ব্যবহার করা হয় স্ট্রিংগুলোকে একসাথে যোগ করে একটি নতুন স্ট্রিং তৈরি করার জন্য।
+
+
+
+    SELECT author_lname FROM books;
+ 
+    SELECT DISTINCT author_lname FROM books;
+
+    +----------------+
+    | author_lname   |
+    +----------------+
+    | Lahiri         |
+    | Gaiman         |
+    | Eggers         |
+    | Chabon         |
+    | Smith          |
+    | Carver         |
+    | DeLillo        |
+    | Steinbeck      |
+    | Foster Wallace |
+    | Harris         |
+    | Saunders       |
+    +----------------+
+     
+    SELECT author_fname, author_lname FROM books;
+
+    +--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Jhumpa       | Lahiri         |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Jhumpa       | Lahiri         |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| Michael      | Chabon         |
+| Patti        | Smith          |
+| Dave         | Eggers         |
+| Neil         | Gaiman         |
+| Raymond      | Carver         |
+| Raymond      | Carver         |
+| Don          | DeLillo        |
+| John         | Steinbeck      |
+| David        | Foster Wallace |
+| David        | Foster Wallace |
+| Dan          | Harris         |
+| Freida       | Harris         |
+| George       | Saunders       |
++--------------+----------------+
+     
+SELECT DISTINCT CONCAT(author_fname,' ', author_lname) FROM books;
+
++----------------------------------------+
+| CONCAT(author_fname,' ', author_lname) |
++----------------------------------------+
+| Jhumpa Lahiri                          |
+| Neil Gaiman                            |
+| Dave Eggers                            |
+| Michael Chabon                         |
+| Patti Smith                            |
+| Raymond Carver                         |
+| Don DeLillo                            |
+| John Steinbeck                         |
+| David Foster Wallace                   |
+| Dan Harris                             |
+| Freida Harris                          |
+| George Saunders                        |
++----------------------------------------+
+    
+SELECT DISTINCT author_fname, author_lname FROM books;
+
++--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Jhumpa       | Lahiri         |
+| Neil         | Gaiman         |
+| Dave         | Eggers         |
+| Michael      | Chabon         |
+| Patti        | Smith          |
+| Raymond      | Carver         |
+| Don          | DeLillo        |
+| John         | Steinbeck      |
+| David        | Foster Wallace |
+| Dan          | Harris         |
+| Freida       | Harris         |
+| George       | Saunders       |
++--------------+----------------+
+
+
+SELECT * FROM books
+ORDER BY author_lname;
+
+SELECT * FROM books
+ORDER BY author_lname DESC;
+
+SELECT * FROM books
+ORDER BY released_year;
+
+SELECT book_id, author_fname, author_lname, pages
+FROM books ORDER BY 2 desc;
+
+SELECT book_id, author_fname, author_lname, pages: এই অংশটি books টেবিল থেকে book_id, author_fname, author_lname, এবং pages কলামগুলো সিলেক্ট করছে।
+
+FROM books: এটি নির্দিষ্ট করে দিচ্ছে যে ডেটা books টেবিল থেকে নেয়া হবে।
+
+ORDER BY 2 DESC:
+
+ORDER BY হলো ডেটা সাজানোর কমান্ড। এখানে 2 নির্দেশ করে যে দ্বিতীয় কলাম অর্থাৎ author_fname এর উপর ভিত্তি করে ডেটা সাজানো হবে।
+DESC হলো "Descending" অর্থাৎ সাজানোর ক্রম হবে অবতরণশীল (বড় থেকে ছোট দিকে)।
+এখানে author_fname কলামটি অবতরণশীল ক্রমে সাজানো হবে, মানে Z থেকে A পর্যন্ত সাজানো হবে।
+
++---------+--------------+----------------+-------+
+| book_id | author_fname | author_lname   | pages |
++---------+--------------+----------------+-------+
+|      11 | Raymond      | Carver         |   176 |
+|      12 | Raymond      | Carver         |   526 |
+|       8 | Patti        | Smith          |   304 |
+|       2 | Neil         | Gaiman         |   304 |
+|       3 | Neil         | Gaiman         |   465 |
+|      10 | Neil         | Gaiman         |   208 |
+|       7 | Michael      | Chabon         |   634 |
+|      14 | John         | Steinbeck      |   181 |
+|       1 | Jhumpa       | Lahiri         |   291 |
+|       4 | Jhumpa       | Lahiri         |   198 |
+|      19 | George       | Saunders       |   367 |
+|      18 | Freida       | Harris         |   428 |
+|      13 | Don          | DeLillo        |   320 |
+|      15 | David        | Foster Wallace |   329 |
+|      16 | David        | Foster Wallace |   343 |
+|       5 | Dave         | Eggers         |   352 |
+|       6 | Dave         | Eggers         |   504 |
+|       9 | Dave         | Eggers         |   437 |
+|      17 | Dan          | Harris         |   256 |
++---------+--------------+----------------+-------+
+
+
+SELECT book_id, author_fname, author_lname, pages
+FROM books ORDER BY author_lname, author_fname;
+
++---------+--------------+----------------+-------+
+| book_id | author_fname | author_lname   | pages |
++---------+--------------+----------------+-------+
+|      11 | Raymond      | Carver         |   176 |
+|      12 | Raymond      | Carver         |   526 |
+|       7 | Michael      | Chabon         |   634 |
+|      13 | Don          | DeLillo        |   320 |
+|       5 | Dave         | Eggers         |   352 |
+|       6 | Dave         | Eggers         |   504 |
+|       9 | Dave         | Eggers         |   437 |
+|      15 | David        | Foster Wallace |   329 |
+|      16 | David        | Foster Wallace |   343 |
+|       2 | Neil         | Gaiman         |   304 |
+|       3 | Neil         | Gaiman         |   465 |
+|      10 | Neil         | Gaiman         |   208 |
+|      17 | Dan          | Harris         |   256 |
+|      18 | Freida       | Harris         |   428 |
+|       1 | Jhumpa       | Lahiri         |   291 |
+|       4 | Jhumpa       | Lahiri         |   198 |
+|      19 | George       | Saunders       |   367 |
+|       8 | Patti        | Smith          |   304 |
+|      14 | John         | Steinbeck      |   181 |
++---------+--------------+----------------+-------+
+
+
+
+SELECT title FROM books LIMIT 3;
+ 
+SELECT title FROM books LIMIT 1;
+ 
+SELECT title FROM books LIMIT 10;
+ 
+SELECT * FROM books LIMIT 1;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 5;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 1;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 14;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 0,5;
+
++----------------------------------+---------------+
+| title                            | released_year |
++----------------------------------+---------------+
+| Lincoln In The Bardo             |          2017 |
+| Norse Mythology                  |          2016 |
+| 10% Happier                      |          2014 |
+| The Circle                       |          2013 |
+| A Hologram for the King: A Novel |          2012 |
++----------------------------------+---------------+
+
+SELECT title, released_year: এই অংশটি books টেবিল থেকে title এবং released_year কলামগুলো সিলেক্ট করে।
+
+FROM books: এটি নির্দেশ করে যে ডেটা books টেবিল থেকে নেয়া হবে।
+
+ORDER BY released_year DESC:
+
+ORDER BY অংশটি ডেটা সাজানোর জন্য ব্যবহৃত হয়। এখানে released_year কলামের উপর ভিত্তি করে সাজানো হবে।
+DESC (Descending) নির্দেশ করে যে সাজানো হবে অবতরণশীল ক্রমে, অর্থাৎ সবচেয়ে নতুন বছর থেকে পুরানো বছরে সাজানো হবে।
+LIMIT 0,5:
+
+LIMIT অংশটি ডেটার রেকর্ড সংখ্যা সীমাবদ্ধ করতে ব্যবহৃত হয়।
+0,5 এর মানে হলো, রেকর্ডের শুরু থেকে (০ থেকে) প্রথম ৫টি রেকর্ড দেখানো হবে।
+অর্থাৎ, শুধু টপ ৫টি রেকর্ড দেখাবে, যেখানে released_year এর উপর ভিত্তি করে সবচেয়ে নতুন বছরের বইগুলো প্রদর্শিত হবে।
+
+
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 0,3;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 1,3;
+ 
+SELECT title, released_year FROM books 
+ORDER BY released_year DESC LIMIT 10,1;
+
++---------------+---------------+
+| title         | released_year |
++---------------+---------------+
+| American Gods |          2001 |
++---------------+---------------+
+ 
+SELECT * FROM tbl LIMIT 95,18446744073709551615;
+ 
+SELECT title FROM books LIMIT 5;
+ 
+SELECT title FROM books LIMIT 5, 123219476457;
+
++-----------------------------------------------------+
+| title                                               |
++-----------------------------------------------------+
+| The Circle                                          |
+| The Amazing Adventures of Kavalier & Clay           |
+| Just Kids                                           |
+| A Heartbreaking Work of Staggering Genius           |
+| Coraline                                            |
+| What We Talk About When We Talk About Love: Stories |
+| Where I'm Calling From: Selected Stories            |
+| White Noise                                         |
+| Cannery Row                                         |
+| Oblivion: Stories                                   |
+| Consider the Lobster                                |
+| 10% Happier                                         |
+| fake_book                                           |
+| Lincoln In The Bardo                                |
++-----------------------------------------------------+
+ 
+SELECT title FROM books LIMIT 5, 50;
+
++-----------------------------------------------------+
+| title                                               |
++-----------------------------------------------------+
+| The Circle                                          |
+| The Amazing Adventures of Kavalier & Clay           |
+| Just Kids                                           |
+| A Heartbreaking Work of Staggering Genius           |
+| Coraline                                            |
+| What We Talk About When We Talk About Love: Stories |
+| Where I'm Calling From: Selected Stories            |
+| White Noise                                         |
+| Cannery Row                                         |
+| Oblivion: Stories                                   |
+| Consider the Lobster                                |
+| 10% Happier                                         |
+| fake_book                                           |
+| Lincoln In The Bardo                                |
++-----------------------------------------------------+
+
+
+<pre class="prettyprint linenums">
+    SELECT title, author_fname, author_lname, pages 
+    FROM books
+    WHERE author_fname LIKE '%da%';
+
++-------------------------------------------+--------------+----------------+-------+
+| title                                     | author_fname | author_lname   | pages |
++-------------------------------------------+--------------+----------------+-------+
+| A Hologram for the King: A Novel          | Dave         | Eggers         |   352 |
+| The Circle                                | Dave         | Eggers         |   504 |
+| A Heartbreaking Work of Staggering Genius | Dave         | Eggers         |   437 |
+| Oblivion: Stories                         | David        | Foster Wallace |   329 |
+| Consider the Lobster                      | David        | Foster Wallace |   343 |
+| 10% Happier                               | Dan          | Harris         |   256 |
+| fake_book                                 | Freida       | Harris         |   428 |
++-------------------------------------------+--------------+----------------+-------+
+    
+SELECT title, author_fname, author_lname, pages 
+FROM books
+WHERE title LIKE '%:%';
+
++-----------------------------------------------------+--------------+----------------+-------+
+| title                                               | author_fname | author_lname   | pages |
++-----------------------------------------------------+--------------+----------------+-------+
+| A Hologram for the King: A Novel                    | Dave         | Eggers         |   352 |
+| What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |   176 |
+| Where I'm Calling From: Selected Stories            | Raymond      | Carver         |   526 |
+| Oblivion: Stories                                   | David        | Foster Wallace |   329 |
++-----------------------------------------------------+--------------+----------------+-------+
+
+SELECT * FROM books
+WHERE author_fname LIKE '____';
+
+SELECT * FROM books
+WHERE author_fname LIKE '_a_';
+
++---------+-------------+--------------+--------------+---------------+----------------+-------+
+| book_id | title       | author_fname | author_lname | released_year | stock_quantity | pages |
++---------+-------------+--------------+--------------+---------------+----------------+-------+
+|      17 | 10% Happier | Dan          | Harris       |          2014 |             29 |   256 |
++---------+-------------+--------------+--------------+---------------+----------------+-------+
+
+
+-- To select books with '%' in their title:
+SELECT * FROM books
+WHERE title LIKE '%\%%';
+
+ব্যাখ্যা:
+LIKE অপারেটর ব্যবহার করা হচ্ছে title কলামে % চিহ্ন খুঁজে বের করতে।
+SQL-এ % সাধারণত একটি ওয়াইল্ডকার্ড, যা যে কোনো সংখ্যক অক্ষর বা চিহ্ন নির্দেশ করে।
+এখানে \% ব্যবহার করা হচ্ছে % কে একটি সাধারণ চিহ্ন হিসেবে ট্রিট করতে, অর্থাৎ এটি কোনো ওয়াইল্ডকার্ড নয়।
+'%\%%' এর অর্থ: title কলামে যে কোনো স্থানে % চিহ্ন আছে এমন রেকর্ডগুলো খুঁজে বের করবে।
+উদাহরণ:
+যদি কোনো বইয়ের টাইটেল হয় "50% off sale" তবে এটি রিটার্ন করবে, কারণ টাইটেলে % চিহ্ন রয়েছে।
+
+
+
+-- To select books with an underscore '_' in title:
+SELECT * FROM books
+WHERE title LIKE '%\_%';
+
+ব্যাখ্যা:
+এই কোডে LIKE অপারেটর ব্যবহার করা হচ্ছে title কলামে _ চিহ্ন খুঁজে বের করার জন্য।
+_ SQL-এ সাধারণত একটি একক অক্ষরের জন্য ওয়াইল্ডকার্ড হিসেবে ব্যবহৃত হয়।
+এখানে \_ ব্যবহার করে _ কে একটি সাধারণ চিহ্ন হিসেবে নির্দিষ্ট করা হয়েছে।
+'%\_%' এর মানে: title কলামে যেকোনো স্থানে _ চিহ্ন আছে এমন রেকর্ডগুলো খুঁজে বের করবে।
+উদাহরণ:
+যদি কোনো বইয়ের টাইটেল হয় "Book_Title" তবে এটি রিটার্ন করবে, কারণ টাইটেলে _ চিহ্ন রয়েছে।
+
+
+
+SELECT title FROM books WHERE title LIKE '%stories%';
+ 
+SELECT title, pages FROM books ORDER BY pages DESC LIMIT 1;
+ 
+SELECT 
+    CONCAT(title, ' - ', released_year) AS summary 
+FROM books ORDER BY released_year DESC LIMIT 3;
+
++-----------------------------+
+| summary                     |
++-----------------------------+
+| Lincoln In The Bardo - 2017 |
+| Norse Mythology - 2016      |
+| 10% Happier - 2014          |
++-----------------------------+
+ 
+SELECT title, author_lname FROM books WHERE author_lname LIKE '% %';
+
+SELECT title, author_lname: এই অংশটি books টেবিল থেকে title এবং author_lname কলামগুলো নির্বাচন করে।
+
+FROM books: এটি নির্দিষ্ট করে যে ডেটা books টেবিল থেকে নেয়া হবে।
+
+WHERE author_lname LIKE '% %':
+
+WHERE অংশটি এমন শর্ত যোগ করে যা author_lname কলামের ডেটা ফিল্টার করবে।
+LIKE '% %' নির্দেশ করে যে author_lname কলামে অন্তত একটি স্পেস আছে এমন রেকর্ডগুলো নির্বাচন করা হবে।
+% হলো একটি ওয়াইল্ডকার্ড, যা কোনো সংখ্যা বা অক্ষরের যে কোনো সংমিশ্রণ নির্দেশ করে। % % নির্দেশ করে যে author_lname কলামে যেকোনো অবস্থানে একটি স্পেস আছে।
+
++----------------------+----------------+
+| title                | author_lname   |
++----------------------+----------------+
+| Oblivion: Stories    | Foster Wallace |
+| Consider the Lobster | Foster Wallace |
++----------------------+----------------+
+ 
+SELECT title, released_year, stock_quantity 
+FROM books ORDER BY stock_quantity LIMIT 3;
+
++-----------------------------------------------------+---------------+----------------+
+| title                                               | released_year | stock_quantity |
++-----------------------------------------------------+---------------+----------------+
+| Where I'm Calling From: Selected Stories            |          1989 |             12 |
+| American Gods                                       |          2001 |             12 |
+| What We Talk About When We Talk About Love: Stories |          1981 |             23 |
++-----------------------------------------------------+---------------+----------------+
+ 
+SELECT title, author_lname 
+FROM books ORDER BY author_lname, title;
+
++-----------------------------------------------------+----------------+
+| title                                               | author_lname   |
++-----------------------------------------------------+----------------+
+| What We Talk About When We Talk About Love: Stories | Carver         |
+| Where I'm Calling From: Selected Stories            | Carver         |
+| The Amazing Adventures of Kavalier & Clay           | Chabon         |
+| White Noise                                         | DeLillo        |
+| A Heartbreaking Work of Staggering Genius           | Eggers         |
+| A Hologram for the King: A Novel                    | Eggers         |
+| The Circle                                          | Eggers         |
+| Consider the Lobster                                | Foster Wallace |
+| Oblivion: Stories                                   | Foster Wallace |
+| American Gods                                       | Gaiman         |
+| Coraline                                            | Gaiman         |
+| Norse Mythology                                     | Gaiman         |
+| 10% Happier                                         | Harris         |
+| fake_book                                           | Harris         |
+| Interpreter of Maladies                             | Lahiri         |
+| The Namesake                                        | Lahiri         |
+| Lincoln In The Bardo                                | Saunders       |
+| Just Kids                                           | Smith          |
+| Cannery Row                                         | Steinbeck      |
++-----------------------------------------------------+----------------+
+ 
+SELECT title, author_lname 
+FROM books ORDER BY 2,1;
+ 
+SELECT
+    CONCAT(
+        'MY FAVORITE AUTHOR IS ',
+        UPPER(author_fname),
+        ' ',
+        UPPER(author_lname),
+        '!'
+    ) AS yell
+FROM books ORDER BY author_lname;
+
++---------------------------------------------+
+| yell                                        |
++---------------------------------------------+
+| MY FAVORITE AUTHOR IS RAYMOND CARVER!       |
+| MY FAVORITE AUTHOR IS RAYMOND CARVER!       |
+| MY FAVORITE AUTHOR IS MICHAEL CHABON!       |
+| MY FAVORITE AUTHOR IS DON DELILLO!          |
+| MY FAVORITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVORITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVORITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVORITE AUTHOR IS DAVID FOSTER WALLACE! |
+| MY FAVORITE AUTHOR IS DAVID FOSTER WALLACE! |
+| MY FAVORITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVORITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVORITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVORITE AUTHOR IS DAN HARRIS!           |
+| MY FAVORITE AUTHOR IS FREIDA HARRIS!        |
+| MY FAVORITE AUTHOR IS JHUMPA LAHIRI!        |
+| MY FAVORITE AUTHOR IS JHUMPA LAHIRI!        |
+| MY FAVORITE AUTHOR IS GEORGE SAUNDERS!      |
+| MY FAVORITE AUTHOR IS PATTI SMITH!          |
+| MY FAVORITE AUTHOR IS JOHN STEINBECK!       |
++---------------------------------------------+
+
+</pre>
