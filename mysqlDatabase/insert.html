@@ -261,3 +261,51 @@ SELECT name, age FROM cats WHERE breed='Tabby';
 SELECT cat_id, age FROM cats WHERE cat_id=age;
 
 SELECT * FROM cats WHERE cat_id=age;
+
+
+-- Use 'AS' to alias a column in your results (it doesn't actually change the name of the column in the table)
+
+SELECT cat_id AS id, name FROM cats;
+
+CODE: Updating Data
+Change tabby cats to shorthair:
+
++-------------+-------------+
+| namecolumn  | name        |
++-------------+-------------+
+| Blue Steele | Blue Steele |
+| blue steele | blue steele |
+| Blue Steele | Blue Steele |
++-------------+-------------+
+
+UPDATE cats SET breed='Shorthair' WHERE breed='Tabby';
+
+Another update:
+
+UPDATE cats3 SET age=14 WHERE name='Blue Steele';
+
+
+CODE: Update Challenges Solution
+
+
+SELECT * FROM cats WHERE name='Jackson'; 
+
+UPDATE cats SET name='Jack' WHERE name='Jackson'; 
+
+SELECT * FROM cats WHERE name='Jackson'; 
+
+SELECT * FROM cats WHERE name='Jack'; 
+
+SELECT * FROM cats WHERE name='Ringo'; 
+
+UPDATE cats SET breed='British Shorthair' WHERE name='Ringo'; 
+
+SELECT * FROM cats WHERE name='Ringo'; 
+
+SELECT * FROM cats; 
+
+SELECT * FROM cats WHERE breed='Maine Coon'; 
+
+UPDATE cats SET age=12 WHERE breed='Maine Coon'; 
+
+SELECT * FROM cats WHERE breed='Maine Coon';
