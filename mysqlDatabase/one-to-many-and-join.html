@@ -1,0 +1,256 @@
+CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50)
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+INSERT INTO customers (first_name, last_name, email) 
+VALUES ('Boy', 'George', 'george@gmail.com'),
+       ('George', 'Michael', 'gm@gmail.com'),
+       ('David', 'Bowie', 'david@gmail.com'),
+       ('Blue', 'Steele', 'blue@gmail.com'),
+       ('Bette', 'Davis', 'bette@aol.com');
+       
+       
+INSERT INTO orders (order_date, amount, customer_id)
+VALUES ('2016-02-10', 99.99, 1),
+       ('2017-11-11', 35.50, 1),
+       ('2014-12-12', 800.67, 2),
+       ('2015-01-03', 12.50, 2),
+       ('1999-04-11', 450.25, 5);
+
+SELECT id FROM customers WHERE last_name = 'George';
+SELECT * FROM orders WHERE customer_id = 1;
+
+
+SELECT * FROM orders 
+WHERE customer_id = (SELECT id FROM customers WHERE last_name = 'George');
+
++----+------------+--------+-------------+
+| id | order_date | amount | customer_id |
++----+------------+--------+-------------+
+|  1 | 2016-02-10 |  99.99 |           1 |
+|  2 | 2017-11-11 |  35.50 |           1 |
++----+------------+--------+-------------+
+
+-- To perform a (kind of useless) cross join:
+SELECT * FROM customers, orders;
+
+
+-- Our first inner join!
+SELECT * FROM customers
+JOIN orders ON orders.customer_id = customers.id;
+
++----+------------+-----------+------------------+----+------------+--------+-------------+
+| id | first_name | last_name | email            | id | order_date | amount | customer_id |
++----+------------+-----------+------------------+----+------------+--------+-------------+
+|  1 | Boy        | George    | george@gmail.com |  1 | 2016-02-10 |  99.99 |           1 |
+|  1 | Boy        | George    | george@gmail.com |  2 | 2017-11-11 |  35.50 |           1 |
+|  2 | George     | Michael   | gm@gmail.com     |  3 | 2014-12-12 | 800.67 |           2 |
+|  2 | George     | Michael   | gm@gmail.com     |  4 | 2015-01-03 |  12.50 |           2 |
+|  5 | Bette      | Davis     | bette@aol.com    |  5 | 1999-04-11 | 450.25 |           5 |
++----+------------+-----------+------------------+----+------------+--------+-------------+
+
+SELECT first_name, last_name, order_date, amount FROM customers
+JOIN orders ON orders.customer_id = customers.id;
+
++------------+-----------+------------+--------+
+| first_name | last_name | order_date | amount |
++------------+-----------+------------+--------+
+| Boy        | George    | 2016-02-10 |  99.99 |
+| Boy        | George    | 2017-11-11 |  35.50 |
+| George     | Michael   | 2014-12-12 | 800.67 |
+| George     | Michael   | 2015-01-03 |  12.50 |
+| Bette      | Davis     | 1999-04-11 | 450.25 |
++------------+-----------+------------+--------+
+
+-- The order doesn't matter here:
+SELECT * FROM orders
+JOIN customers ON customers.id = orders.customer_id;
+
++----+------------+--------+-------------+----+------------+-----------+------------------+
+| id | order_date | amount | customer_id | id | first_name | last_name | email            |
++----+------------+--------+-------------+----+------------+-----------+------------------+
+|  1 | 2016-02-10 |  99.99 |           1 |  1 | Boy        | George    | george@gmail.com |
+|  2 | 2017-11-11 |  35.50 |           1 |  1 | Boy        | George    | george@gmail.com |
+|  3 | 2014-12-12 | 800.67 |           2 |  2 | George     | Michael   | gm@gmail.com     |
+|  4 | 2015-01-03 |  12.50 |           2 |  2 | George     | Michael   | gm@gmail.com     |
+|  5 | 1999-04-11 | 450.25 |           5 |  5 | Bette      | Davis     | bette@aol.com    |
++----+------------+--------+-------------+----+------------+-----------+------------------+
+
+
+SELECT 
+    first_name, last_name, SUM(amount) AS total
+FROM
+    customers
+        JOIN
+    orders ON orders.customer_id = customers.id
+GROUP BY first_name , last_name
+ORDER BY total;
+
++------------+-----------+--------+
+| first_name | last_name | total  |
++------------+-----------+--------+
+| Boy        | George    | 135.49 |
+| Bette      | Davis     | 450.25 |
+| George     | Michael   | 813.17 |
++------------+-----------+--------+
+
+
+1. JOIN (INNER JOIN):
+JOIN বা INNER JOIN ব্যবহার করলে দুটি টেবিলের কেবল সেই রেকর্ডগুলোই মিলিত হয় যেখানে উভয় টেবিলে মিলে যাওয়া রেকর্ড থাকে।
+অর্থাৎ, যেখানে টেবিল A এবং টেবিল B উভয়েই নির্দিষ্ট কলামের ভিত্তিতে মিল খুঁজে পায়, কেবল সেসব রেকর্ডই আউটপুটে দেখানো হয়।
+যদি কোনো রেকর্ড টেবিল A-তে থাকে কিন্তু টেবিল B-তে না থাকে বা উল্টোটা হয়, তবে সেটি আউটপুটে অন্তর্ভুক্ত হবে না।
+
+
+
+SELECT 
+    first_name, last_name, order_date, amount
+FROM
+    customers
+        LEFT JOIN
+    orders ON orders.customer_id = customers.id;
+
+
+    +------------+-----------+------------+--------+
+    | first_name | last_name | order_date | amount |
+    +------------+-----------+------------+--------+
+    | Boy        | George    | 2016-02-10 |  99.99 |
+    | Boy        | George    | 2017-11-11 |  35.50 |
+    | George     | Michael   | 2014-12-12 | 800.67 |
+    | George     | Michael   | 2015-01-03 |  12.50 |
+    | David      | Bowie     | NULL       |   NULL |
+    | Blue       | Steele    | NULL       |   NULL |
+    | Bette      | Davis     | 1999-04-11 | 450.25 |
+    +------------+-----------+------------+--------+
+
+
+SELECT 
+    order_date, amount, first_name, last_name
+FROM
+    orders
+        LEFT JOIN
+    customers ON orders.customer_id = customers.id;
+
+
++------------+--------+------------+-----------+
+| order_date | amount | first_name | last_name |
++------------+--------+------------+-----------+
+| 2016-02-10 |  99.99 | Boy        | George    |
+| 2017-11-11 |  35.50 | Boy        | George    |
+| 2014-12-12 | 800.67 | George     | Michael   |
+| 2015-01-03 |  12.50 | George     | Michael   |
+| 1999-04-11 | 450.25 | Bette      | Davis     |
++------------+--------+------------+-----------+
+
+
+LEFT JOIN:
+LEFT JOIN টেবিলের বাঁদিকের (বা প্রথম) টেবিল থেকে সব রেকর্ড রিটার্ন করে, এমনকি যদি ডান টেবিল (বা দ্বিতীয় টেবিল) থেকে কোনো মেলানো রেকর্ড না থাকে।
+যদি কোনো রেকর্ডের জন্য টেবিল B-তে মিল খুঁজে না পাওয়া যায়, তাহলে সেই ক্ষেত্রে টেবিল B এর ফিল্ডগুলোতে NULL দেখাবে।
+এটি সাধারণত এমন সময় ব্যবহার করা হয় যখন একটি টেবিলের সব রেকর্ড রাখতে চাই, এমনকি যদি অন্য টেবিল থেকে মিল না পায়।
+
+
+SELECT 
+    first_name, 
+    last_name, 
+    IFNULL(SUM(amount), 0) AS money_spent
+FROM
+    customers
+        LEFT JOIN
+    orders ON customers.id = orders.customer_id
+GROUP BY first_name , last_name;
+
+
++------------+-----------+-------------+
+| first_name | last_name | money_spent |
++------------+-----------+-------------+
+| Boy        | George    |      135.49 |
+| George     | Michael   |      813.17 |
+| David      | Bowie     |        0.00 |
+| Blue       | Steele    |        0.00 |
+| Bette      | Davis     |      450.25 |
++------------+-----------+-------------+
+
+
+SELECT first_name, last_name:
+
+এটি customers টেবিল থেকে প্রতিটি গ্রাহকের প্রথম নাম (first_name) এবং শেষ নাম (last_name) নির্বাচন করে।
+IFNULL(SUM(amount), 0) AS money_spent:
+
+SUM(amount) অংশটি orders টেবিল থেকে প্রতিটি গ্রাহকের জন্য মোট অর্ডারের টাকা (মোট খরচ) যোগ করে।
+IFNULL ফাংশনটি এখানে সেই গ্রাহকদের জন্য কাজ করে যাদের কোনো অর্ডার নেই। যদি কোনো গ্রাহকের অর্ডার না থাকে, তবে SUM(amount) NULL হয়ে যাবে, এবং IFNULL সেই NULL কে 0 দ্বারা প্রতিস্থাপন করবে।
+money_spent নামে এই ফলাফলটি প্রদর্শন করা হবে।
+FROM customers:
+
+customers টেবিলটি মূল টেবিল হিসাবে ব্যবহৃত হয়েছে, এবং প্রতিটি গ্রাহককে তালিকাভুক্ত করা হয়েছে।
+LEFT JOIN orders ON customers.id = orders.customer_id:
+
+এই LEFT JOIN অংশটি customers এবং orders টেবিলকে এমনভাবে যুক্ত করেছে যেখানে customers টেবিলের id এবং orders টেবিলের customer_id মিলবে।
+যেহেতু এটি একটি LEFT JOIN, তাই customers টেবিলের সব তথ্য ফলাফলে থাকবে, এমনকি যদি কোনো গ্রাহকের অর্ডার না থাকে। যে গ্রাহকদের অর্ডার নেই তাদের ক্ষেত্রে amount ফিল্ডটি NULL হয়ে যাবে, এবং IFNULL এটিকে 0 করে দেবে।
+GROUP BY first_name, last_name:
+
+GROUP BY অংশটি প্রতিটি গ্রাহকের first_name এবং last_name অনুযায়ী গ্রুপ করে, যাতে প্রতিটি গ্রাহক একবার করে তালিকাভুক্ত হয় এবং তাদের মোট খরচ দেখানো হয়।
+
+
+SELECT 
+    first_name, last_name, order_date, amount
+FROM
+    customers
+        RIGHT JOIN
+    orders ON customers.id = orders.customer_id;
+
+    +------------+-----------+------------+--------+
+    | first_name | last_name | order_date | amount |
+    +------------+-----------+------------+--------+
+    | Boy        | George    | 2016-02-10 |  99.99 |
+    | Boy        | George    | 2017-11-11 |  35.50 |
+    | George     | Michael   | 2014-12-12 | 800.67 |
+    | George     | Michael   | 2015-01-03 |  12.50 |
+    | Bette      | Davis     | 1999-04-11 | 450.25 |
+    +------------+-----------+------------+--------+
+
+
+RIGHT JOIN এর কার্যপ্রণালী
+RIGHT JOIN ব্যবহার করলে ডান টেবিলের সব সারি (যেটি JOIN করা হয়েছে) ফলাফলে থাকবে।
+বামপাশের টেবিলে যদি মিল পাওয়া যায়, তবে সেই মিলের তথ্যও দেখানো হবে।
+বাম টেবিলের সাথে যদি কোনো মিল না পাওয়া যায়, তবে সেই ক্ষেত্রের মান NULL দেখানো হবে।
+
+
+CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50)
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    amount DECIMAL(8 , 2 ),
+    customer_id INT,
+    FOREIGN KEY (customer_id)
+        REFERENCES customers (id)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE orders: এটি orders নামে একটি টেবিল তৈরি করছে।
+id INT PRIMARY KEY AUTO_INCREMENT: id কলামটি একটি পূর্ণসংখ্যা এবং এটি টেবিলের প্রাথমিক কী। AUTO_INCREMENT দিয়ে প্রতিটি নতুন অর্ডারের জন্য একটি ইউনিক সংখ্যা তৈরি হবে।
+order_date DATE: অর্ডার তারিখ রাখার জন্য একটি কলাম, যা DATE ফরম্যাটে থাকবে।
+amount DECIMAL(8, 2): অর্ডারের মোট অর্থমূল্য রাখার জন্য একটি কলাম। এই ক্ষেত্রে মোট আটটি সংখ্যা রাখা যাবে, যেখানে দুইটি সংখ্যা দশমিকের পরে থাকবে।
+customer_id INT: এটি গ্রাহকের id রাখার জন্য একটি কলাম, যা customers টেবিলের সাথে সম্পর্কযুক্ত।
+
+
+FOREIGN KEY (customer_id): customer_id কলামটি orders টেবিলকে customers টেবিলের id কলামের সাথে সংযুক্ত করে, অর্থাৎ এটি একটি ফরেন কী।
+REFERENCES customers (id): customer_id কলামটি customers টেবিলের id কলামকে রেফারেন্স করে।
+ON DELETE CASCADE: যদি customers টেবিল থেকে কোনো গ্রাহকের রেকর্ড মুছে ফেলা হয়, তবে সেই গ্রাহকের সাথে সম্পর্কিত সমস্ত অর্ডার (যেগুলোর customer_id সেই গ্রাহক id এর সমান) স্বয়ংক্রিয়ভাবে orders টেবিল থেকে মুছে যাবে।
+

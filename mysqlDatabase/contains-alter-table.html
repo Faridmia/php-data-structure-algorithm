@@ -1,0 +1,145 @@
+CREATE TABLE contacts (
+	name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE
+);
+
+INSERT INTO contacts (name, phone)
+VALUES ('billybob', '8781213455');
+
+-- This insert would result in an error:
+INSERT INTO contacts (name, phone)
+VALUES ('billybob', '8781213455');
+
+
+CREATE TABLE users2 (
+    username VARCHAR(20) NOT NULL,
+    age INT,
+    CONSTRAINT age_not_negative CHECK (age >= 0)
+);
+
+username: একটি VARCHAR(20) ডেটাটাইপ কলাম, যা ২০টি পর্যন্ত অক্ষর গ্রহণ করতে পারে। NOT NULL কনস্ট্রেইন্ট থাকার কারণে এই কলামে অবশ্যই একটি মান থাকা বাধ্যতামূলক।
+
+age: একটি INT ডেটাটাইপ কলাম, যেখানে ব্যবহারকারীর বয়স রাখা হবে।
+
+CONSTRAINT age_not_negative CHECK (age >= 0):
+
+এখানে age_not_negative নামে একটি কনস্ট্রেইন্ট তৈরি করা হয়েছে।
+CHECK (age >= 0) শর্তটি নিশ্চিত করে যে age কলামে ০ বা এর বেশি (ইতিবাচক) মান প্রবেশ করা যেতে পারে। বয়স কখনোই ঋণাত্মক হতে পারবে না।
+
+
+
+CREATE TABLE palindromes2 (
+  word VARCHAR(100),
+  CONSTRAINT word_is_palindrome CHECK(REVERSE(word) = word)
+);
+
+word: একটি VARCHAR(100) ডেটাটাইপ কলাম, যা ১০০টি পর্যন্ত অক্ষর ধারণ করতে পারে। এই কলামে একটি শব্দ প্রবেশ করানো হবে।
+
+CONSTRAINT word_is_palindrome CHECK(REVERSE(word) = word):
+
+এখানে word_is_palindrome নামে একটি কনস্ট্রেইন্ট তৈরি করা হয়েছে।
+CHECK(REVERSE(word) = word) শর্তটি নিশ্চিত করে যে word কলামে শুধু সেই ধরনের শব্দই রাখা যাবে, যেগুলো Palindrome। অর্থাৎ, শব্দটি উল্টো করলেও একই রকম থাকে। উদাহরণস্বরূপ, 'madam', 'level', ইত্যাদি।
+
+
+CREATE TABLE companies (
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    CONSTRAINT name_address UNIQUE (name, address)
+);
+
+
+name: একটি VARCHAR(255) ডেটাটাইপের কলাম, যা কোম্পানির নাম সংরক্ষণ করবে। NOT NULL কনস্ট্রেইন্ট থাকার কারণে এই কলামে অবশ্যই একটি মান থাকা বাধ্যতামূলক।
+
+address: একটি VARCHAR(255) ডেটাটাইপের কলাম, যা কোম্পানির ঠিকানা সংরক্ষণ করবে। NOT NULL কনস্ট্রেইন্ট থাকার কারণে এই কলামেও অবশ্যই একটি মান থাকা বাধ্যতামূলক।
+
+CONSTRAINT name_address UNIQUE (name, address):
+
+name_address নামে একটি UNIQUE কনস্ট্রেইন্ট তৈরি করা হয়েছে।
+এই কনস্ট্রেইন্টের মাধ্যমে নিশ্চিত করা হয়েছে যে name এবং address কলামের কম্বিনেশন প্রতিটি রেকর্ডের জন্য ইউনিক হবে। অর্থাৎ, একই কোম্পানি এবং ঠিকানার সংমিশ্রণ একাধিকবার প্রবেশ করানো যাবে না।
+
+
+
+CREATE TABLE houses (
+  purchase_price INT NOT NULL,
+  sale_price INT NOT NULL,
+  CONSTRAINT sprice_gt_pprice CHECK(sale_price >= purchase_price)
+);
+
+
+purchase_price: একটি INT ডেটাটাইপের কলাম, যা বাড়ির ক্রয়মূল্য সংরক্ষণ করবে। NOT NULL কনস্ট্রেইন্ট থাকার কারণে এই কলামটি খালি থাকতে পারবে না।
+
+sale_price: একটি INT ডেটাটাইপের কলাম, যা বাড়ির বিক্রয়মূল্য সংরক্ষণ করবে। NOT NULL কনস্ট্রেইন্ট থাকার কারণে এই কলামটিও খালি থাকতে পারবে না।
+
+CONSTRAINT sprice_gt_pprice CHECK(sale_price >= purchase_price):
+
+sprice_gt_pprice নামে একটি CHECK কনস্ট্রেইন্ট তৈরি করা হয়েছে।
+এই শর্তটি নিশ্চিত করে যে sale_price কলামে purchase_price এর চেয়ে সমান বা বড় মান থাকতে হবে। অর্থাৎ, বিক্রয়মূল্য কখনোই ক্রয়মূল্যের চেয়ে কম হতে পারবে না।
+
+
+ALTER TABLE companies 
+ADD COLUMN phone VARCHAR(15);
+
+ALTER TABLE companies
+ADD COLUMN employee_count INT NOT NULL DEFAULT 1;
+
+ALTER TABLE companies DROP COLUMN phone;
+
+
+RENAME TABLE companies to suppliers;
+
+
+ALTER TABLE suppliers RENAME TO companies;
+
+
+ALTER TABLE companies
+RENAME COLUMN name TO company_name;
+
+
+1. RENAME TABLE companies TO suppliers;
+
+এই কমান্ডটি পুরো টেবিলের নাম পরিবর্তন করার জন্য ব্যবহার করা হয়েছে।
+companies টেবিলের নাম suppliers এ পরিবর্তন করা হয়েছে।
+অর্থাৎ, আগে যে টেবিলের নাম companies ছিল, সেটি এখন suppliers নামে পরিচিত হবে।
+
+
+2. ALTER TABLE suppliers RENAME TO companies;
+
+এই কমান্ডটি টেবিলের নাম পুনরায় পরিবর্তন করার জন্য ব্যবহার করা হয়েছে।
+টেবিলের বর্তমান নাম suppliers থেকে আবার companies এ পরিবর্তন করা হয়েছে।
+ALTER TABLE কমান্ড দিয়ে টেবিলের নাম পরিবর্তন করতে পারা যায়।
+
+
+3. ALTER TABLE companies RENAME COLUMN name TO company_name;
+
+
+এই কমান্ডটি টেবিলের একটি নির্দিষ্ট কলামের নাম পরিবর্তন করার জন্য ব্যবহার করা হয়েছে।
+companies টেবিলের name নামে থাকা কলামটি company_name নামে পরিবর্তন করা হয়েছে।
+ALTER TABLE এবং RENAME COLUMN কমান্ড ব্যবহার করে এই পরিবর্তন করা হয়।
+
+
+ALTER TABLE companies MODIFY company_name VARCHAR(100) DEFAULT 'unknown';
+এই কমান্ডটি companies টেবিলের company_name কলামের বৈশিষ্ট্য পরিবর্তন করে।
+company_name এর ডেটা টাইপ এখন VARCHAR(100) করা হয়েছে, যা ১০০ অক্ষরের স্ট্রিং পর্যন্ত ডেটা রাখতে সক্ষম।
+কলামের জন্য একটি ডিফল্ট মান unknown নির্ধারণ করা হয়েছে। অর্থাৎ, যদি কোনো ভ্যালু উল্লেখ না করা হয়, তাহলে এই কলামে unknown স্বয়ংক্রিয়ভাবে সেট হবে।
+
+
+2. ALTER TABLE suppliers CHANGE business biz_name VARCHAR(50);
+
+
+এই কমান্ডটি suppliers টেবিলের একটি কলামের নাম এবং ডেটা টাইপ পরিবর্তনের জন্য ব্যবহৃত হয়েছে।
+CHANGE কমান্ড দিয়ে business কলামের নাম পরিবর্তন করে biz_name করা হয়েছে।
+একইসাথে biz_name এর ডেটা টাইপ VARCHAR(50) সেট করা হয়েছে, যা ৫০ অক্ষর পর্যন্ত স্ট্রিং ভ্যালু রাখতে সক্ষম।
+
+
+ALTER TABLE houses ADD CONSTRAINT positive_pprice CHECK (purchase_price >= 0);
+
+
+এই কমান্ডটি houses টেবিলে একটি নতুন কন্ডিশন বা শর্ত যোগ করে।
+ADD CONSTRAINT positive_pprice অংশটি নতুন কন্ডিশনের নাম positive_pprice নির্ধারণ করে।
+CHECK (purchase_price >= 0) এর অর্থ হলো, purchase_price কলামের মান সবসময় শূন্য বা তার বেশি হতে হবে।
+এই কন্ডিশন houses টেবিলের purchase_price কলামে প্রয়োগ করা হয় যাতে এই কলামে কোনো নেতিবাচক মান (negative value) ইনসার্ট না করা যায়।
+
+
+2. ALTER TABLE houses DROP CONSTRAINT positive_pprice;
+এই কমান্ডটি houses টেবিল থেকে পূর্বে যোগ করা positive_pprice কন্ডিশনটি মুছে ফেলার জন্য ব্যবহৃত হয়।
+DROP CONSTRAINT positive_pprice অংশটি positive_pprice কন্ডিশনটি অপসারণ করে, ফলে purchase_price কলামে যে কোনো মান ইনসার্ট করা সম্ভব হয়, এমনকি নেতিবাচক মানও।
