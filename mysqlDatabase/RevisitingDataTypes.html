@@ -1,0 +1,168 @@
+CREATE TABLE people (
+	name VARCHAR(100),
+    birthdate DATE,
+    birthtime TIME,
+    birthdt DATETIME
+);
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Elton', '2000-12-25', '11:00:00', '2000-12-25 11:00:00');
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Lulu', '1985-04-11', '9:45:10', '1985-04-11 9:45:10');
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Juan', '2020-08-15', '23:59:00', '2020-08-15 23:59:00');
+
+SELECT CURTIME();
+
++-----------+
+| CURTIME() |
++-----------+
+| 09:59:45  |
++-----------+
+
+SELECT CURDATE();
+
++------------+
+| CURDATE()  |
++------------+
+| 2024-11-02 |
++------------+
+
+SELECT NOW();
+
++---------------------+
+| 2024-11-02 10:01:52 |
++---------------------+
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Hazel', CURDATE(), CURTIME(), NOW());
+
+
+SELECT 
+    birthdate,
+    DAY(birthdate),
+    DAYOFWEEK(birthdate),
+    DAYOFYEAR(birthdate)
+FROM people;
+
++------------+----------------+----------------------+----------------------+
+| birthdate  | DAY(birthdate) | DAYOFWEEK(birthdate) | DAYOFYEAR(birthdate) |
++------------+----------------+----------------------+----------------------+
+| 2000-12-25 |             25 |                    2 |                  360 |
+| 1985-04-11 |             11 |                    5 |                  101 |
+| 2020-08-15 |             15 |                    7 |                  228 |
+| 2024-11-02 |              2 |                    7 |                  307 |
++------------+----------------+----------------------+----------------------+
+
+SELECT 
+    birthdate,
+    MONTHNAME(birthdate),
+    YEAR(birthdate)
+FROM people;
+
++------------+----------------------+-----------------+
+| birthdate  | MONTHNAME(birthdate) | YEAR(birthdate) |
++------------+----------------------+-----------------+
+| 2000-12-25 | December             |            2000 |
+| 1985-04-11 | April                |            1985 |
+| 2020-08-15 | August               |            2020 |
+| 2024-11-02 | November             |            2024 |
++------------+----------------------+-----------------+
+
+SELECT 
+    birthtime,
+    HOUR(birthtime),
+    MINUTE(birthtime)
+FROM people;
+
++-----------+-----------------+-------------------+
+| birthtime | HOUR(birthtime) | MINUTE(birthtime) |
++-----------+-----------------+-------------------+
+| 11:00:00  |              11 |                 0 |
+| 09:45:10  |               9 |                45 |
+| 23:59:00  |              23 |                59 |
+| 10:02:57  |              10 |                 2 |
++-----------+-----------------+-------------------+
+
+SELECT 
+    birthdt,
+    MONTH(birthdt),
+    DAY(birthdt),
+    HOUR(birthdt),
+    MINUTE(birthdt)
+FROM people;
+
++---------------------+----------------+--------------+---------------+-----------------+
+| birthdt             | MONTH(birthdt) | DAY(birthdt) | HOUR(birthdt) | MINUTE(birthdt) |
++---------------------+----------------+--------------+---------------+-----------------+
+| 2000-12-25 11:00:00 |             12 |           25 |            11 |               0 |
+| 1985-04-11 09:45:10 |              4 |           11 |             9 |              45 |
+| 2020-08-15 23:59:00 |              8 |           15 |            23 |              59 |
+| 2024-11-02 10:02:57 |             11 |            2 |            10 |               2 |
++---------------------+----------------+--------------+---------------+-----------------+
+
+
+SELECT birthdate, DATE_FORMAT(birthdate, '%a %b %D') FROM people;
+
++------------+------------------------------------+
+| birthdate  | DATE_FORMAT(birthdate, '%a %b %D') |
++------------+------------------------------------+
+| 2000-12-25 | Mon Dec 25th                       |
+| 1985-04-11 | Thu Apr 11th                       |
+| 2020-08-15 | Sat Aug 15th                       |
+| 2024-11-02 | Sat Nov 2nd                        |
++------------+------------------------------------+
+
+birthdate: জন্মতারিখ প্রদান করে।
+DATE_FORMAT(birthdate, '%a %b %D'): birthdate-কে একটি নির্দিষ্ট ফরম্যাটে রূপান্তর করে। এখানে %a, %b, এবং %D-এর অর্থ হলো:
+%a: সংক্ষিপ্ত দিনের নাম (যেমন, Mon, Tue)
+%b: সংক্ষিপ্ত মাসের নাম (যেমন, Jan, Feb)
+%D: দিনের সংখ্যা সাথে st, nd, rd, বা th (যেমন, 1st, 2nd, 3rd)
+
+SELECT birthdt, DATE_FORMAT(birthdt, '%H:%i') FROM people;
+
++---------------------+-------------------------------+
+| birthdt             | DATE_FORMAT(birthdt, '%H:%i') |
++---------------------+-------------------------------+
+| 2000-12-25 11:00:00 | 11:00                         |
+| 1985-04-11 09:45:10 | 09:45                         |
+| 2020-08-15 23:59:00 | 23:59                         |
+| 2024-11-02 10:02:57 | 10:02                         |
++---------------------+-------------------------------+
+
+birthdt: birthdate এবং birthtime এর সমন্বয়ে তৈরি তারিখ-সময়।
+DATE_FORMAT(birthdt, '%H:%i'): birthdt থেকে ঘন্টা এবং মিনিট বের করে আনে। এখানে %H এবং %i মানে:
+%H: 24-ঘন্টা ফরম্যাটে ঘন্টা (যেমন, 13 বা 23)
+%i: মিনিট সংখ্যা
+
+SELECT birthdt, DATE_FORMAT(birthdt, 'BORN ON: %r') FROM people;
+
++---------------------+-------------------------------------+
+| birthdt             | DATE_FORMAT(birthdt, 'BORN ON: %r') |
++---------------------+-------------------------------------+
+| 2000-12-25 11:00:00 | BORN ON: 11:00:00 AM                |
+| 1985-04-11 09:45:10 | BORN ON: 09:45:10 AM                |
+| 2020-08-15 23:59:00 | BORN ON: 11:59:00 PM                |
+| 2024-11-02 10:02:57 | BORN ON: 10:02:57 AM                |
++---------------------+-------------------------------------+
+
+DATE_FORMAT(birthdt, 'BORN ON: %r'): birthdt থেকে সময়কে AM/PM ফরম্যাটে আনে এবং এর আগে BORN ON: শব্দগুলো যোগ করে। এখানে %r এর অর্থ:
+%r: 12-ঘন্টা ফরম্যাটে সময় (যেমন, 11:00:00 AM)
+
+
+CREATE TABLE captions (
+  text VARCHAR(150),
+  created_at TIMESTAMP default CURRENT_TIMESTAMP
+);
+
+CREATE TABLE captions2 (
+  text VARCHAR(150),
+  created_at TIMESTAMP default CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+text এবং created_at: এগুলোর কার্যকারিতা captions টেবিলের মতোই।
+updated_at: একটি অতিরিক্ত TIMESTAMP কলাম, যা প্রতিবার সারির আপডেটের সময় স্বয়ংক্রিয়ভাবে বর্তমান সময় দিয়ে আপডেট হবে।
+ON UPDATE CURRENT_TIMESTAMP: যখনই সারিতে কোনো পরিবর্তন হবে, তখন updated_at কলামটি বর্তমান সময় দিয়ে আপডেট হবে।

@@ -1,0 +1,423 @@
+SELECT * FROM books
+WHERE released_year != 2017;
+
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+| book_id | title                 | author_fname | author_lname | released_year | pages | genre     | price |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+|      11 | To Kill a Mockingbird | Harper       | Lee          |          1960 |   324 | Fiction   | 15.99 |
+|      12 | 1984                  | George       | Orwell       |          1949 |   328 | Dystopian | 12.99 |
+|      13 | The Great Gatsby      | F. Scott     | Fitzgerald   |          1925 |   180 | Classic   | 10.99 |
+|      14 | Pride and Prejudice   | Jane         | Austen       |          1813 |   279 | Romance   |  8.99 |
+|      15 | Moby-Dick             | Herman       | Melville     |          1851 |   635 | Adventure | 13.50 |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+
+SELECT * FROM books
+WHERE title NOT LIKE '%e%';
+
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+| book_id | title                 | author_fname | author_lname | released_year | pages | genre     | price |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+|      11 | To Kill a Mockingbird | Harper       | Lee          |          1960 |   324 | Fiction   | 15.99 |
+|      12 | 1984                  | George       | Orwell       |          1949 |   328 | Dystopian | 12.99 |
+|      15 | Moby-Dick             | Herman       | Melville     |          1851 |   635 | Adventure | 13.50 |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+
+SELECT * FROM books
+WHERE released_year > 2005;
+
++---------+--------------------------------------+--------------+--------------+---------------+-------+--------------------+-------+
+| book_id | title                                | author_fname | author_lname | released_year | pages | genre              | price |
++---------+--------------------------------------+--------------+--------------+---------------+-------+--------------------+-------+
+|      16 | The Road                             | Cormac       | McCarthy     |          2006 |   287 | Fiction            | 16.99 |
+|      17 | Harry Potter and the Deathly Hallows | J.K.         | Rowling      |          2007 |   607 | Fantasy            | 29.99 |
+|      18 | The Hunger Games                     | Suzanne      | Collins      |          2008 |   374 | Dystopian          | 18.99 |
+|      20 | The Help                             | Kathryn      | Stockett     |          2009 |   464 | Historical Fiction | 20.99 |
++---------+--------------------------------------+--------------+--------------+---------------+-------+--------------------+-------+
+
+SELECT * FROM books
+WHERE pages > 500;
+
++---------+--------------------------------------+--------------+--------------+---------------+-------+-----------+-------+
+| book_id | title                                | author_fname | author_lname | released_year | pages | genre     | price |
++---------+--------------------------------------+--------------+--------------+---------------+-------+-----------+-------+
+|      15 | Moby-Dick                            | Herman       | Melville     |          1851 |   635 | Adventure | 13.50 |
+|      17 | Harry Potter and the Deathly Hallows | J.K.         | Rowling      |          2007 |   607 | Fantasy   | 29.99 |
++---------+--------------------------------------+--------------+--------------+---------------+-------+-----------+-------+
+
+SELECT * FROM books
+WHERE pages < 200;
+
++---------+------------------+--------------+--------------+---------------+-------+---------+-------+
+| book_id | title            | author_fname | author_lname | released_year | pages | genre   | price |
++---------+------------------+--------------+--------------+---------------+-------+---------+-------+
+|      13 | The Great Gatsby | F. Scott     | Fitzgerald   |          1925 |   180 | Classic | 10.99 |
++---------+------------------+--------------+--------------+---------------+-------+---------+-------+
+
+SELECT * FROM books
+WHERE released_year < 2000;
+
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+| book_id | title                 | author_fname | author_lname | released_year | pages | genre     | price |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+|      11 | To Kill a Mockingbird | Harper       | Lee          |          1960 |   324 | Fiction   | 15.99 |
+|      12 | 1984                  | George       | Orwell       |          1949 |   328 | Dystopian | 12.99 |
+|      13 | The Great Gatsby      | F. Scott     | Fitzgerald   |          1925 |   180 | Classic   | 10.99 |
+|      14 | Pride and Prejudice   | Jane         | Austen       |          1813 |   279 | Romance   |  8.99 |
+|      15 | Moby-Dick             | Herman       | Melville     |          1851 |   635 | Adventure | 13.50 |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+
+SELECT * FROM books
+WHERE released_year <= 1985;
+
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+| book_id | title                 | author_fname | author_lname | released_year | pages | genre     | price |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+|      11 | To Kill a Mockingbird | Harper       | Lee          |          1960 |   324 | Fiction   | 15.99 |
+|      12 | 1984                  | George       | Orwell       |          1949 |   328 | Dystopian | 12.99 |
+|      13 | The Great Gatsby      | F. Scott     | Fitzgerald   |          1925 |   180 | Classic   | 10.99 |
+|      14 | Pride and Prejudice   | Jane         | Austen       |          1813 |   279 | Romance   |  8.99 |
+|      15 | Moby-Dick             | Herman       | Melville     |          1851 |   635 | Adventure | 13.50 |
++---------+-----------------------+--------------+--------------+---------------+-------+-----------+-------+
+
+SELECT title, author_lname, released_year FROM books
+WHERE released_year > 2010
+AND author_lname = 'Eggers';
+
+SELECT title, author_lname, released_year FROM books
+WHERE released_year > 2010
+AND author_lname = 'Eggers'
+AND title LIKE '%novel%';
+
+
+SELECT title, pages FROM books 
+WHERE CHAR_LENGTH(title) > 30
+AND pages > 500;
+
+SELECT title, author_lname FROM books
+WHERE author_lname='Eggers' AND
+released_year > 2010;
+
+SELECT title, author_lname, released_year FROM books
+WHERE author_lname='Eggers' OR
+released_year > 2005;
+
++--------------------------------------+--------------+---------------+
+| title                                | author_lname | released_year |
++--------------------------------------+--------------+---------------+
+| The Road                             | McCarthy     |          2006 |
+| Harry Potter and the Deathly Hallows | Rowling      |          2007 |
+| The Hunger Games                     | Collins      |          2008 |
+| The Help                             | Stockett     |          2009 |
++--------------------------------------+--------------+---------------+
+
+
+SELECT title, pages FROM books
+WHERE pages < 200 
+OR title LIKE '%stories%';
+
++------------------+-------+
+| title            | pages |
++------------------+-------+
+| The Great Gatsby |   180 |
++------------------+-------+
+
+SELECT title, released_year FROM books
+WHERE released_year <= 2015
+AND released_year >= 2004;
+
++--------------------------------------+---------------+
+| title                                | released_year |
++--------------------------------------+---------------+
+| The Road                             |          2006 |
+| Harry Potter and the Deathly Hallows |          2007 |
+| The Hunger Games                     |          2008 |
+| The Help                             |          2009 |
++--------------------------------------+---------------+
+
+SELECT title, released_year FROM books
+WHERE released_year BETWEEN 2004 AND 2014;
+
++--------------------------------------+---------------+
+| title                                | released_year |
++--------------------------------------+---------------+
+| The Road                             |          2006 |
+| Harry Potter and the Deathly Hallows |          2007 |
+| The Hunger Games                     |          2008 |
+| The Help                             |          2009 |
++--------------------------------------+---------------+
+
+SELECT * FROM people WHERE birthtime 
+BETWEEN CAST('12:00:00' AS TIME) 
+AND CAST('16:00:00' AS TIME);
+
+SELECT * FROM people:
+
+এটি people টেবিলের সব কলাম থেকে ডেটা নির্বাচন করে।
+WHERE birthtime:
+
+এই অংশটি birthtime কলামের মানের উপর শর্ত আরোপ করছে। এখানে আমরা সেই রেকর্ডগুলো খুঁজছি যেখানে birthtime এর মান নির্দিষ্ট সময়ের মধ্যে রয়েছে।
+BETWEEN:
+
+BETWEEN অপারেটরটি দুটি মানের মধ্যে (অন্তর্ভুক্ত) পরিসীমা নির্ধারণ করতে ব্যবহৃত হয়। এর মাধ্যমে বলা হচ্ছে যে birthtime কলামের মানটি দুইটি নির্দিষ্ট সময়ের মধ্যে থাকতে হবে।
+CAST('12:00:00' AS TIME) এবং CAST('16:00:00' AS TIME):
+
+CAST ফাংশনটি একটি স্ট্রিং (যেমন '12:00:00' এবং '16:00:00') কে একটি TIME ডেটাটাইপে রূপান্তরিত করছে। এই সময়গুলো হলো ১২:০০ PM থেকে ৪:০০ PM।
+
+
+SELECT * FROM people WHERE HOUR(birthtime)
+BETWEEN 12 AND 16;
+
+
+SELECT title, author_lname FROM books
+WHERE author_lname = 'Carver' 
+OR author_lname = 'Lahiri'
+OR author_lname = 'Smith';
+
+SELECT title, author_lname FROM books
+WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+
+SELECT title, author_lname FROM books
+WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
+
+
+SELECT title, released_year FROM books
+WHERE released_year >= 2000 
+AND released_year % 2 = 1;
+
+SELECT title, released_year FROM books:
+
+এই অংশটি books টেবিল থেকে title এবং released_year কলাম দুটোকে নির্বাচন করে।
+WHERE released_year >= 2000:
+
+এই শর্তটি নির্দেশ করে যে released_year এর মান 2000 বা তার বেশি হতে হবে। অর্থাৎ, 2000 সালের পর প্রকাশিত বইগুলোকেই নির্বাচিত করা হবে।
+AND released_year % 2 = 1:
+
+এই অংশটি released_year এর মানটি বিজোড় সংখ্যা হতে হবে তা নিশ্চিত করে। % অপারেটরটি মডিউলাস অপারেটর, যা দুটি সংখ্যা ভাগ করার পর অবশিষ্টাংশ প্রদান করে। এখানে released_year % 2 = 1 চেক করছে যে, released_year কে 2 দিয়ে ভাগ করলে যদি অবশিষ্টাংশ 1 আসে, তবে সেটি বিজোড় সংখ্যা।
+
+
+
+SELECT title, released_year,
+CASE
+	WHEN released_year >= 2000 THEN 'modern lit'
+    ELSE '20th century lit' 
+END AS genre
+FROM books;
+
++--------------------------------------+---------------+------------------+
+| title                                | released_year | genre            |
++--------------------------------------+---------------+------------------+
+| To Kill a Mockingbird                |          1960 | 20th century lit |
+| 1984                                 |          1949 | 20th century lit |
+| The Great Gatsby                     |          1925 | 20th century lit |
+| Pride and Prejudice                  |          1813 | 20th century lit |
+| Moby-Dick                            |          1851 | 20th century lit |
+| The Road                             |          2006 | modern lit       |
+| Harry Potter and the Deathly Hallows |          2007 | modern lit       |
+| The Hunger Games                     |          2008 | modern lit       |
+| Atonement                            |          2001 | modern lit       |
+| The Help                             |          2009 | modern lit       |
++--------------------------------------+---------------+------------------+
+
+SELECT title, released_year:
+
+এই অংশটি books টেবিল থেকে title এবং released_year কলাম দুটোকে নির্বাচন করে।
+CASE:
+
+CASE হল SQL এর একটি শর্তমূলক স্টেটমেন্ট যা শর্ত অনুযায়ী ভিন্ন ফলাফল প্রদান করে। এটি বিভিন্ন শর্ত পরীক্ষা করে এবং প্রথম শর্তটি সত্য হলে সেটির সাথে যুক্ত মান ফিরিয়ে দেয়।
+WHEN released_year >= 2000 THEN 'modern lit':
+
+এই শর্তটি পরীক্ষা করে যে, যদি released_year এর মান 2000 বা তার বেশি হয়, তাহলে 'modern lit' (আধুনিক সাহিত্য) ফিরিয়ে দেবে।
+ELSE '20th century lit':
+
+যদি উপরের শর্তটি মিথ্যা হয় (অর্থাৎ, released_year 2000 এর কম হলে), তখন এটি '20th century lit' (20শ শতাব্দীর সাহিত্য) ফিরিয়ে দেবে।
+END AS genre:
+
+END দ্বারা CASE স্টেটমেন্টটি শেষ হয়। AS genre অংশটি নতুন কলামটির নাম নির্ধারণ করে। এখানে নতুন কলামটির নাম genre।
+FROM books:
+
+এই অংশটি নির্দেশ করে যে, তথ্যগুলো books টেবিল থেকে নেওয়া হচ্ছে।
+
+
+
+SELECT 
+    title,
+    stock_quantity,
+    CASE
+        WHEN stock_quantity BETWEEN 0 AND 40 THEN '*'
+        WHEN stock_quantity BETWEEN 41 AND 70 THEN '**'
+        WHEN stock_quantity BETWEEN 71 AND 100 THEN '***'
+        WHEN stock_quantity BETWEEN 101 AND 140 THEN '****'
+        ELSE '*****'
+    END AS stock
+FROM
+    books;
+
+    +--------------------------------------+----------------+-------+
+    | title                                | stock_quantity | stock |
+    +--------------------------------------+----------------+-------+
+    | To Kill a Mockingbird                |           NULL | ***** |
+    | 1984                                 |           NULL | ***** |
+    | The Great Gatsby                     |           NULL | ***** |
+    | Pride and Prejudice                  |           NULL | ***** |
+    | Moby-Dick                            |           NULL | ***** |
+    | The Road                             |           NULL | ***** |
+    | Harry Potter and the Deathly Hallows |           NULL | ***** |
+    | The Hunger Games                     |           NULL | ***** |
+    | Atonement                            |           NULL | ***** |
+    | The Help                             |           NULL | ***** |
+    | The Great Gatsby                     |             30 | *     |
+    | 1984                                 |             15 | *     |
+    | To Kill a Mockingbird                |             45 | **    |
+    | Pride and Prejudice                  |             50 | **    |
+    | The Catcher in the Rye               |             20 | *     |
+    +--------------------------------------+----------------+-------+
+
+    ALTER TABLE books
+ADD COLUMN stock_quantity INT;
+
+
+
+title, stock_quantity: এখানে আমরা দুটি কলাম নির্বাচন করছি:
+
+title: বইয়ের শিরোনাম।
+stock_quantity: বইয়ের স্টক পরিমাণ।
+CASE: এটি একটি শর্তযুক্ত স্টেটমেন্ট যা stock_quantity এর মানের উপর ভিত্তি করে বিভিন্ন ফলাফল প্রদান করে। এখানে কিছু শর্ত দেওয়া হয়েছে:
+
+WHEN stock_quantity BETWEEN 0 AND 40 THEN '*':
+
+যদি stock_quantity ০ থেকে ৪০ এর মধ্যে হয়, তবে stock কলামে '*' মান দেওয়া হবে।
+WHEN stock_quantity BETWEEN 41 AND 70 THEN ''**:
+
+যদি stock_quantity ৪১ থেকে ৭০ এর মধ্যে হয়, তবে stock কলামে '**' মান দেওয়া হবে।
+WHEN stock_quantity BETWEEN 71 AND 100 THEN '*'**:
+
+যদি stock_quantity ৭১ থেকে ১০০ এর মধ্যে হয়, তবে stock কলামে '***' মান দেওয়া হবে।
+WHEN stock_quantity BETWEEN 101 AND 140 THEN '****':
+
+যদি stock_quantity ১০১ থেকে ১৪০ এর মধ্যে হয়, তবে stock কলামে '****' মান দেওয়া হবে।
+ELSE '*':
+
+যদি উল্লিখিত কোনও শর্ত মেলেনা, তবে stock কলামে '*****' মান দেওয়া হবে।
+END AS stock:
+
+এখানে END নির্দেশ করে যে CASE স্টেটমেন্ট শেষ হয়েছে এবং AS stock দ্বারা নতুন কলামের নাম stock হিসেবে নির্ধারণ করা হয়েছে।
+FROM books:
+
+এটি নির্দেশ করে যে আমরা books টেবিল থেকে ডাটা নির্বাচন করছি।
+
+
+
+SELECT 
+    title,
+    stock_quantity,
+    CASE
+        WHEN stock_quantity <= 40 THEN '*'
+        WHEN stock_quantity <= 70 THEN '**'
+        WHEN stock_quantity <= 100 THEN '***'
+        WHEN stock_quantity <= 140 THEN '****'
+        ELSE '*****'
+    END AS stock
+FROM
+    books;
+
+    +--------------------------------------+----------------+-------+
+    | title                                | stock_quantity | stock |
+    +--------------------------------------+----------------+-------+
+    | To Kill a Mockingbird                |           NULL | ***** |
+    | 1984                                 |           NULL | ***** |
+    | The Great Gatsby                     |           NULL | ***** |
+    | Pride and Prejudice                  |           NULL | ***** |
+    | Moby-Dick                            |           NULL | ***** |
+    | The Road                             |           NULL | ***** |
+    | Harry Potter and the Deathly Hallows |           NULL | ***** |
+    | The Hunger Games                     |           NULL | ***** |
+    | Atonement                            |           NULL | ***** |
+    | The Help                             |           NULL | ***** |
+    | The Great Gatsby                     |             30 | *     |
+    | 1984                                 |             15 | *     |
+    | To Kill a Mockingbird                |             45 | **    |
+    | Pride and Prejudice                  |             50 | **    |
+    | The Catcher in the Rye               |             20 | *     |
+    +--------------------------------------+----------------+-------+
+
+
+excercise
+
+SELECT * FROM books WHERE released_year < 1980;
+
+SELECT * FROM books 
+WHERE author_lname = 'Eggers'
+OR author_lname = 'Chabon';
+
+SELECT * FROM books
+WHERE author_lname = 'Lahiri'
+AND released_year > 2000;
+
+SELECT * FROM books
+WHERE pages >= 100 
+AND pages <= 200;
+
+SELECT * FROM books
+WHERE pages BETWEEN 100 and 200;
+
+SELECT title, author_lname FROM books
+WHERE author_lname LIKE 'C%'
+OR author_lname LIKE 'S%';
+
+SELECT title, author_lname
+FROM books WHERE SUBSTR(author_lname, 1, 1) in ('C', 'S');
+
+SELECT title, author_lname,
+CASE
+    WHEN title LIKE '%stories%' THEN 'Short Stories'
+    WHEN title = 'Just Kids' THEN 'Memoir' 
+    WHEN title = 'A Heartbreaking Work of Staggering Genius' THEN 'Memior'
+    ELSE 'Novel'
+END AS type
+FROM books;
+
++--------------------------------------+--------------+-------+
+| title                                | author_lname | type  |
++--------------------------------------+--------------+-------+
+| To Kill a Mockingbird                | Lee          | Novel |
+| 1984                                 | Orwell       | Novel |
+| The Great Gatsby                     | Fitzgerald   | Novel |
+| Pride and Prejudice                  | Austen       | Novel |
+| Moby-Dick                            | Melville     | Novel |
+| The Road                             | McCarthy     | Novel |
+| Harry Potter and the Deathly Hallows | Rowling      | Novel |
+| The Hunger Games                     | Collins      | Novel |
+| Atonement                            | McEwan       | Novel |
+| The Help                             | Stockett     | Novel |
+| The Great Gatsby                     | Fitzgerald   | Novel |
+| 1984                                 | Orwell       | Novel |
+| To Kill a Mockingbird                | Lee          | Novel |
+| Pride and Prejudice                  | Austen       | Novel |
+| The Catcher in the Rye               | Salinger     | Novel |
++--------------------------------------+--------------+-------+
+
+
+SELECT author_fname, author_lname,
+	CASE
+        WHEN COUNT(*) = 1 THEN '1 book'
+        ELSE CONCAT(COUNT(*), ' books')
+	END AS count
+FROM books
+WHERE author_lname IS NOT NULL
+GROUP BY author_fname, author_lname;
+
++--------------+--------------+---------+
+| author_fname | author_lname | count   |
++--------------+--------------+---------+
+| Harper       | Lee          | 2 books |
+| George       | Orwell       | 2 books |
+| F. Scott     | Fitzgerald   | 2 books |
+| Jane         | Austen       | 2 books |
+| Herman       | Melville     | 1 book  |
+| Cormac       | McCarthy     | 1 book  |
+| J.K.         | Rowling      | 1 book  |
+| Suzanne      | Collins      | 1 book  |
+| Ian          | McEwan       | 1 book  |
+| Kathryn      | Stockett     | 1 book  |
+| J.D.         | Salinger     | 1 book  |
++--------------+--------------+---------+
