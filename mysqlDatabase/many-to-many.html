@@ -546,7 +546,7 @@ FROM
         JOIN
     reviewers ON reviewers.id = reviews.reviewer_id;
 
-    
+
 +----------------------+---------------+-----------+--------+------------+-----------+
 | title                | released_year | genre     | rating | first_name | last_name |
 +----------------------+---------------+-----------+--------+------------+-----------+
@@ -598,3 +598,147 @@ FROM
 | Freaks and Geeks     |          1999 | Comedy    |    8.8 | Pinkie     | Petit     |
 | General Hospital     |          1963 | Drama     |    4.3 | Pinkie     | Petit     |
 +----------------------+---------------+-----------+--------+------------+-----------+
+
+
+
+CREATE TABLE employees2 (
+    emp_no INT PRIMARY KEY AUTO_INCREMENT,
+    department VARCHAR(20),
+    salary INT
+);
+
+INSERT INTO employees2 (department, salary) VALUES
+('engineering', 80000),
+('engineering', 69000),
+('engineering', 70000),
+('engineering', 103000),
+('engineering', 67000),
+('engineering', 89000),
+('engineering', 91000),
+('sales', 59000),
+('sales', 70000),
+('sales', 159000),
+('sales', 72000),
+('sales', 60000),
+('sales', 61000),
+('sales', 61000),
+('customer service', 38000),
+('customer service', 45000),
+('customer service', 61000),
+('customer service', 40000),
+('customer service', 31000),
+('customer service', 56000),
+('customer service', 55000);
+
+
+SELECT emp_no, department, salary, AVG(salary) OVER() FROM employees2;
+
++--------+------------------+--------+--------------------+
+| emp_no | department       | salary | AVG(salary) OVER() |
++--------+------------------+--------+--------------------+
+|      1 | engineering      |  80000 |         68428.5714 |
+|      2 | engineering      |  69000 |         68428.5714 |
+|      3 | engineering      |  70000 |         68428.5714 |
+|      4 | engineering      | 103000 |         68428.5714 |
+|      5 | engineering      |  67000 |         68428.5714 |
+|      6 | engineering      |  89000 |         68428.5714 |
+|      7 | engineering      |  91000 |         68428.5714 |
+|      8 | sales            |  59000 |         68428.5714 |
+|      9 | sales            |  70000 |         68428.5714 |
+|     10 | sales            | 159000 |         68428.5714 |
+|     11 | sales            |  72000 |         68428.5714 |
+|     12 | sales            |  60000 |         68428.5714 |
+|     13 | sales            |  61000 |         68428.5714 |
+|     14 | sales            |  61000 |         68428.5714 |
+|     15 | customer service |  38000 |         68428.5714 |
+|     16 | customer service |  45000 |         68428.5714 |
+|     17 | customer service |  61000 |         68428.5714 |
+|     18 | customer service |  40000 |         68428.5714 |
+|     19 | customer service |  31000 |         68428.5714 |
+|     20 | customer service |  56000 |         68428.5714 |
+|     21 | customer service |  55000 |         68428.5714 |
++--------+------------------+--------+--------------------+
+
+AVG(salary) OVER(): এখানে OVER() ব্যবহৃত হওয়ায় পুরো টেবিলের উপর ভিত্তি করে গড় বেতন দেখানো হয়।
+
+SELECT 
+    emp_no, 
+    department, 
+    salary, 
+    MIN(salary) OVER(),
+    MAX(salary) OVER()
+FROM employees2;
+
++--------+------------------+--------+--------------------+--------------------+
+| emp_no | department       | salary | MIN(salary) OVER() | MAX(salary) OVER() |
++--------+------------------+--------+--------------------+--------------------+
+|      1 | engineering      |  80000 |              31000 |             159000 |
+|      2 | engineering      |  69000 |              31000 |             159000 |
+|      3 | engineering      |  70000 |              31000 |             159000 |
+|      4 | engineering      | 103000 |              31000 |             159000 |
+|      5 | engineering      |  67000 |              31000 |             159000 |
+|      6 | engineering      |  89000 |              31000 |             159000 |
+|      7 | engineering      |  91000 |              31000 |             159000 |
+|      8 | sales            |  59000 |              31000 |             159000 |
+|      9 | sales            |  70000 |              31000 |             159000 |
+|     10 | sales            | 159000 |              31000 |             159000 |
+|     11 | sales            |  72000 |              31000 |             159000 |
+|     12 | sales            |  60000 |              31000 |             159000 |
+|     13 | sales            |  61000 |              31000 |             159000 |
+|     14 | sales            |  61000 |              31000 |             159000 |
+|     15 | customer service |  38000 |              31000 |             159000 |
+|     16 | customer service |  45000 |              31000 |             159000 |
+|     17 | customer service |  61000 |              31000 |             159000 |
+|     18 | customer service |  40000 |              31000 |             159000 |
+|     19 | customer service |  31000 |              31000 |             159000 |
+|     20 | customer service |  56000 |              31000 |             159000 |
+|     21 | customer service |  55000 |              31000 |             159000 |
++--------+------------------+--------+--------------------+--------------------+
+
+MIN(salary) OVER(): পুরো টেবিলের মধ্যে সর্বনিম্ন বেতন।
+MAX(salary) OVER(): পুরো টেবিলের মধ্যে সর্বোচ্চ বেতন।
+    
+    
+SELECT 
+    department,
+    MIN(salary) AS min_salary,
+    MAX(salary) AS max_salary
+FROM
+employees2
+GROUP BY 
+    department;
+
++------------------+------------+------------+
+| department       | min_salary | max_salary |
++------------------+------------+------------+
+| engineering      |      67000 |     103000 |
+| sales            |      59000 |     159000 |
+| customer service |      31000 |      61000 |
++------------------+------------+------------+
+
+
+SELECT 
+    emp_no, 
+    department, 
+    salary, 
+    AVG(salary) OVER(PARTITION BY department) AS dept_avg,
+    AVG(salary) OVER() AS company_avg
+FROM employees;
+
+SELECT 
+    emp_no, 
+    department, 
+    salary, 
+    COUNT(*) OVER(PARTITION BY department) as dept_count
+FROM employees;
+
+SELECT 
+    emp_no, 
+    department, 
+    salary, 
+    SUM(salary) OVER(PARTITION BY department) AS dept_payroll,
+    SUM(salary) OVER() AS total_payroll
+FROM employees;
+
+
+
