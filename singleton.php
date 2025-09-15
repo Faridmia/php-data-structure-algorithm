@@ -22,3 +22,24 @@ $b = Singleton::getInstance();
 $a->property = "hello world";
 
 echo $b->property; // output: hello world
+
+
+
+class Singleton {
+private static $props = array();
+public function _ _construct() {}
+public function _ _get($name)
+{
+if(array_key_exists($name, self::$props)) {
+return self::$props[$name];
+}
+}
+public function _ _set($name, $value)
+{
+self::$props[$name] = $value;
+}
+}
+$a = new Singleton;
+$b = new Singleton;
+$a->property = “hello world”;
+print $b->property;
