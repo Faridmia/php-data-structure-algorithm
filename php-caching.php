@@ -66,3 +66,149 @@ Content Compression (gzip)
 PHP তে সহজ উপায়:
 
 zlib.output_compression = On
+
+
+
+
+<?php ob_start(); ?>
+<HTML>
+ <BODY>
+ Today is <?= strftime("%A, %B %e %Y") ?> 
+ </BODY>
+</HTML>
+<?php
+$output = ob_get_contents(); 
+ob_end_flush();
+cache($output);
+?>
+ob_start() → আউটপুট বাফারে জমা রাখবে
+
+ob_get_contents() → বাফার থেকে কনটেন্ট বের করবে
+
+ob_end_flush() → বাফারের কনটেন্ট ক্লায়েন্টে পাঠাবে
+
+ob_end_clean() → কনটেন্ট মুছে ফেলবে
+
+
+// flat cache 
+
+$cache_file = __DIR__ . "/cache/products.cache";
+$cache_lifetime = 120; // 2 মিনিট cache
+
+if (file_exists($cache_file) && (time() - filemtime($cache_file)) < $cache_lifetime) {
+    // cache থেকে পড়
+    $products = unserialize(file_get_contents($cache_file));
+} else {
+    // database query (example)
+    $mysqli = new mysqli("localhost", "root", "", "shop");
+    $result = $mysqli->query("SELECT id, name, price FROM products LIMIT 10");
+
+    $products = [];
+    while ($row = $result->fetch_assoc()) {
+        $products[] = $row;
+    }
+
+    // cache এ save করো
+    file_put_contents($cache_file, serialize($products));
+}
+
+// output দেখাও
+foreach ($products as $p) {
+    echo $p['name'] . " - $" . $p['price'] . "<br>";
+}
+
+Example 1: Simple Cache File Save & Load
+<?php
+$cache_file = __DIR__ . '/cache/home.cache';
+$cache_lifetime = 60; // cache valid থাকবে 60 সেকেন্ড
+
+// cache file আছে এবং এখনও valid?
+if (file_exists($cache_file) && (time() - filemtime($cache_file)) < $cache_lifetime) {
+    // cache থেকে data load
+    echo file_get_contents($cache_file);
+} else {
+    // নতুন data generate
+    ob_start();
+    echo "<h1>Welcome to my site!</h1>";
+    echo "<p>Current Time: " . date("H:i:s") . "</p>";
+    $output = ob_get_clean();
+
+    // cache এ লিখে রাখো
+    file_put_contents($cache_file, $output);
+
+    // user কে দেখাও
+    echo $output;
+}
+
+
+👉 এখানে প্রথমবার script চালালে file বানাবে, পরের 60 সেকেন্ডের মধ্যে আবার call করলে শুধু cache file serve হবে (database hit হবে না)।
+
+🟠 Example 2: Database Query Result Cache
+<?php
+$cache_file = __DIR__ . "/cache/products.cache";
+$cache_lifetime = 120; // 2 মিনিট cache
+
+if (file_exists($cache_file) && (time() - filemtime($cache_file)) < $cache_lifetime) {
+    // cache থেকে পড়
+    $products = unserialize(file_get_contents($cache_file));
+} else {
+    // database query (example)
+    $mysqli = new mysqli("localhost", "root", "", "shop");
+    $result = $mysqli->query("SELECT id, name, price FROM products LIMIT 10");
+
+    $products = [];
+    while ($row = $result->fetch_assoc()) {
+        $products[] = $row;
+    }
+
+    // cache এ save করো
+    file_put_contents($cache_file, serialize($products));
+}
+
+// output দেখাও
+foreach ($products as $p) {
+    echo $p['name'] . " - $" . $p['price'] . "<br>";
+}
+
+
+👉 এখানে database hit না করেও বারবার product list দেখাতে পারবেন।
+
+🔵 Example 3: File Lock (Concurrency সমস্যা এড়ানো)
+<?php
+$cache_file = __DIR__ . "/cache/page.cache";
+
+$data = "<p>Generated at " . date("H:i:s") . "</p>";
+
+// file write করার সময় lock করো
+$fp = fopen($cache_file, "c+");
+if (flock($fp, LOCK_EX)) { // exclusive lock
+    ftruncate($fp, 0); // আগের data clear
+    fwrite($fp, $data);
+    fflush($fp); // write flush
+    flock($fp, LOCK_UN); // unlock
+}
+fclose($fp);
+
+echo "Cache Updated!";
+
+
+👉 এর ফলে যদি একসাথে দুইটা request আসে, data corrupt হবে না।
+
+🔴 Example 4: Safe File Swap (Atomic Cache Update)
+<?php
+$cache_file = __DIR__ . "/cache/page.cache";
+$temp_file  = $cache_file . ".tmp";
+
+// নতুন data generate
+$data = "<p>Updated at " . date("H:i:s") . "</p>";
+
+// আগে temp file এ লিখো
+file_put_contents($temp_file, $data);
+
+// শেষে rename() করে আসল cache replace করো
+rename($temp_file, $cache_file);
+
+echo "Cache swapped safely!";
+
+
+👉 এখানে rename() atomic operation → মানে পুরানো cache replace হবে একসাথে। মাঝপথে corrupt হবে না।
