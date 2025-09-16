@@ -212,3 +212,41 @@ echo "Cache swapped safely!";
 
 
 👉 এখানে rename() atomic operation → মানে পুরানো cache replace হবে একসাথে। মাঝপথে corrupt হবে না।
+
+// cookie cache 
+
+    class CookieUserInfo {
+    public $name;
+    public $userid;
+    public $interests;
+
+    public function __construct($user = false) {
+        if ($user) {
+            // যদি DB থেকে User অবজেক্ট পাই
+            $this->name = $user->name;
+            $this->userid = $user->id;
+            $this->interests = $user->get_interests();
+        } else {
+            // Cookie থেকে ডেটা রিড
+            if (isset($_COOKIE['USERINFO'])) {
+                list($this->name, $this->userid, $this->interests) =
+                    unserialize($_COOKIE['USERINFO']);
+            } else {
+                throw new Exception("No cookie found");
+            }
+        }
+    }
+
+    public function send() {
+        $cookiestr = serialize([$this->name, $this->userid, $this->interests]);
+        setcookie("USERINFO", $cookiestr, time() + 3600); // 1 hour expiry
+    }
+}
+
+
+$user = new User(123); 
+$cookie = new CookieUserInfo($user);
+$cookie->send(); 
+
+$usercookie = new CookieUserInfo();
+echo "Hello, " . $usercookie->name;
